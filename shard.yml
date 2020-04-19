@@ -1,0 +1,16 @@
+name: xx_hash
+version: 0.1.0
+
+authors:
+  - Yacine Petitprez <anykeyh@gmail.com>
+
+description: |
+  Pure Crystal implementation of xxHash
+
+development_dependencies:
+  ameba:
+    github: veelenga/ameba
+    branch: master
+
+license: MIT
+
