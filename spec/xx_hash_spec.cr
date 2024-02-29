@@ -1,4 +1,5 @@
 require "./spec_helper"
+require "../src/xx_hash"
 
 CASES = [
   # Case A > 32 characters fill buff for 32 and 64 bits versions
