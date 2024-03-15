@@ -3,6 +3,8 @@ require "digest"
 class Digest::XXH32 < ::Digest
   extend ClassMethods
 
+  VERSION = "v0.2"
+
   private P1 = 2654435761_u32
   private P2 = 2246822519_u32
   private P3 = 3266489917_u32
@@ -66,26 +68,25 @@ class Digest::XXH32 < ::Digest
   end
 
   # Incremental hashing.
-  #
-  # TODO: Use modulo.
+
   private def update_impl(data : Bytes) : Nil
     data = @buf + data
 
-    loop do
-      if data.size >= 16
-        slice16 = data[0,16]
-        data += 16
-        @len += 16
-        {% for i in 0..3 %}
-          v = @v{{i}} &+ b2i32({{i*4}}, slice16) &* P2
-          v = rotl(v, 13) &* P1
-          @v{{i}} = v
-        {% end %}
-      else
-        @buf = data
-        break
-      end
+    count = data.size // 16
+    
+    count.times do
+      slice16 = data[0,16]
+      data += 16  # move data slice 16 bytes ahead
+      @len += 16
+   
+      {% for i in 0..3 %}
+        v = @v{{i}} &+ b2i32({{i*4}}, slice16) &* P2
+        v = rotl(v, 13) &* P1
+        @v{{i}} = v
+      {% end %}
     end
+    
+    @buf = data
   end
 
   #

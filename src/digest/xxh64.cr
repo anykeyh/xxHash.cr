@@ -3,6 +3,8 @@ require "digest"
 class Digest::XXH64 < ::Digest
   extend ClassMethods
 
+  VERSION = "0.2"
+
   private P1 = 11400714785074694791_u64
   private P2 = 14029467366897019727_u64
   private P3 = 1609587929392839161_u64
@@ -68,28 +70,25 @@ class Digest::XXH64 < ::Digest
   end
   
   # Incremental hashing.
-  #
-  # TODO: This could go a little faster by using module division
-  # of 32 to determine how many 32 bytes segments to loop over,
-  # instead of using an `if` check each cycle.
+
   private def update_impl(data : Bytes) : Nil
     data = @buf + data
+
+    count = data.size // 32  # How many chunks of 32 bytes 
     
-    loop do
-      if data.size >= 32
-        slice32 = data[0,32] # get the first 32 bytes
-        data += 32           # everything after 32 bytes
-        @len += 32
-        {% for i in 0..3 %}
-          v = @v{{i}} &+ b2i64({{i*8}}, slice32) &* P2
-          v = rotl(v, 31) &* P1
-          @v{{i}} = v
-        {% end %}
-      else
-        @buf = data
-        break
-      end
+    count.times do
+      slice32 = data[0,32] # get the first 32 bytes
+      data += 32           # everything after 32 bytes
+      @len += 32
+
+      {% for i in 0..3 %}
+        v = @v{{i}} &+ b2i64({{i*8}}, slice32) &* P2
+        v = rotl(v, 31) &* P1
+        @v{{i}} = v
+      {% end %}
     end
+    
+    @buf = data
   end
 
   # The final_imp method calls this to get the final digest as a UInt64,
