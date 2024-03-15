@@ -5,11 +5,11 @@ Pure Crystal implementation of [xxHash](https://xxhash.com) XXH32 and XXH64,
 
 ## Usage
 
-The lastest version of XXHash (`0.0.2`) now conforms to Cyrstal's standard
+The lastest version of XXHash now conforms to Cyrstal's standard
 [Digest](https://crystal-lang.org/api/Digest.html) abstraction.
 
-Here is a simple example of hasing a couple strings using the 32-bit hash function
-without a seed (defaults to `0`).
+Here is a simple example of hashing a couple strings using the 32-bit hash
+function without a seed (defaults to `0`).
 
 ```crystal
   require "xxh32"
@@ -23,7 +23,8 @@ without a seed (defaults to `0`).
   d.hexfinal
 ```
 
-Here is an example of hasing an entire file using the 64-bit function with a seed.
+Here is an example of hasing an entire file using the 64-bit function
+with a seed.
 
 ```crystal
 
@@ -36,17 +37,17 @@ Here is an example of hasing an entire file using the 64-bit function with a see
   d.hexfinal
 ```
 
-The digest for either of these can returned as an unsigned integer by using
+The digest for either of these can be returned as an unsigned integer by using
 `to_u32` or `to_u64`, repsectively. Note, these two methods are not part of
 the standard Digest abstraction.
 
-See Crystal's [Digest](https://crystal-lang.org/api/Digest.html) class for further documentation.
+See Crystal's [Digest](https://crystal-lang.org/api/Digest.html) class for further
+documentation.
 
 
 ## Legacy Usage
 
-The old version of this API is deprecated but still available
-for the time-being.
+The old version of this API is deprecated but still available for the time-being.
 
 ```crystal
   require "xx_hash"
@@ -91,3 +92,18 @@ Add to your shard.yml:
     xx_hash:
       github: anykeyh/xx_hash
 ```
+
+## Contributors
+
+* [Yacine Petitprez](https://github.com/anykeyh) *Maintainer* Original author who ported XXH32 and XXH64 to Crystal.
+* [Tom Sawyer](https://github.com/trans) *Contributor* Refactored code to conform to Crystal's standard Digest abstraction.
+
+## Copyright
+
+Copyright (c) 2020 Yacine Petitprez
+
+*Based on original code by Yann Collet.*
+Copyright (c) 2012-2021 Yann Collet
+BSD 2-Clause License (https://www.opensource.org/licenses/bsd-license.php)
+
+
