@@ -1,8 +1,53 @@
 # xx_hash.cr
 
-Pure Crystal implementation of [xxHash](https://github.com/Cyan4973/xxHash) 32 and 64 bits.
+Pure Crystal implementation of [xxHash](https://xxhash.com) XXH32 and XXH64, 
+32-bit and 64-bit non-crypographic hash algorithms.
 
 ## Usage
+
+The lastest version of XXHash now conforms to Cyrstal's standard
+[Digest](https://crystal-lang.org/api/Digest.html) abstraction.
+
+Here is a simple example of hashing a couple strings using the 32-bit hash
+function without a seed (defaults to `0`).
+
+```crystal
+  require "xxh32"
+
+  d = Digest::XXH32.new
+  d << "My String"
+  d.hexfinal
+
+  d.reset
+  d << "Another String"
+  d.hexfinal
+```
+
+Here is an example of hasing an entire file using the 64-bit function
+with a seed.
+
+```crystal
+
+  require "xxh64"
+
+  seed = 1234
+  
+  d = Digest::XXH64.new(seed)
+  d.file("somefile")
+  d.hexfinal
+```
+
+The digest for either of these can be returned as an unsigned integer by using
+`to_u32` or `to_u64`, repsectively. Note, these two methods are not part of
+the standard Digest abstraction.
+
+See Crystal's [Digest](https://crystal-lang.org/api/Digest.html) class for further
+documentation.
+
+
+## Legacy Usage
+
+The old version of this API is deprecated but still available for the time-being.
 
 ```crystal
   require "xx_hash"
@@ -47,3 +92,18 @@ Add to your shard.yml:
     xx_hash:
       github: anykeyh/xx_hash
 ```
+
+## Contributors
+
+* [Yacine Petitprez](https://github.com/anykeyh) *Maintainer* Original author who ported XXH32 and XXH64 to Crystal.
+* [Tom Sawyer](https://github.com/trans) *Contributor* Refactored code to conform to Crystal's standard Digest abstraction.
+
+## Copyright
+
+Copyright (c) 2020 Yacine Petitprez
+
+*Based on original code by Yann Collet.*
+Copyright (c) 2012-2021 Yann Collet
+BSD 2-Clause License (https://www.opensource.org/licenses/bsd-license.php)
+
+
